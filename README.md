@@ -121,11 +121,16 @@ server.port=8090
 # PostgreSQL Configuration
 spring.datasource.url=jdbc:postgresql://localhost:5432/courseDB
 spring.datasource.username=postgres
-spring.datasource.password=YOUR_PASSWORD
+spring.datasource.password=${DB_PASSWORD}  # Set via environment variable
 spring.datasource.driver-class-name=org.postgresql.Driver
 
 spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
 spring.jpa.hibernate.ddl-auto=update
+```
+
+**Note**: For security, use environment variables for sensitive data:
+```bash
+export DB_PASSWORD=your_password
 ```
 
 ### User Management Service Configuration
@@ -137,8 +142,10 @@ Edit `resources/META-INF/persistence.xml`:
 <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
 <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/userDB" />
 <property name="javax.persistence.jdbc.user" value="root" />
-<property name="javax.persistence.jdbc.password" value="YOUR_PASSWORD" />
+<property name="javax.persistence.jdbc.password" value="${DB_PASSWORD}" />  <!-- Use environment variable -->
 ```
+
+**Note**: Configure database credentials securely using environment variables or external configuration.
 
 ## 🚀 Running the Application
 
@@ -160,8 +167,15 @@ The service will start on `http://localhost:8090`
 mvn clean package
 
 # Deploy to WildFly (if using local WildFly installation)
+# Set WILDFLY_HOME if not already set (example for Linux/Mac):
+# export WILDFLY_HOME=/opt/wildfly
+# For Windows: set WILDFLY_HOME=C:\wildfly
+
 # Copy the WAR file to WildFly deployments directory
 cp target/UserAndCourseManagement-1.0-SNAPSHOT.war $WILDFLY_HOME/standalone/deployments/
+
+# Alternative: Copy to typical WildFly path
+# cp target/UserAndCourseManagement-1.0-SNAPSHOT.war /opt/wildfly/standalone/deployments/
 ```
 
 The service will start on `http://localhost:8080`
